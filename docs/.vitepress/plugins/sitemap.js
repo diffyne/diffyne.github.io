@@ -1,4 +1,4 @@
-import { writeFileSync, readdirSync, existsSync } from 'fs'
+import { writeFileSync, readdirSync, existsSync, readFileSync } from 'fs'
 import { join, extname, dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -55,42 +55,65 @@ export function sitemapPlugin() {
             const baseUrl = 'https://diffyne.github.io'
             const lastmod = new Date().toISOString().split('T')[0]
 
+            // Load versions configuration
+            const versionsPath = join(__dirname, '..', 'versions.json')
+            let versions = { versions: [{ version: 'latest', path: '/', default: true }] }
+            if (existsSync(versionsPath)) {
+                versions = JSON.parse(readFileSync(versionsPath, 'utf-8'))
+            }
+
             const pages = []
-
-            const homeUrl = baseUrl + (base === '/' ? '' : base.replace(/\/$/, ''))
-            pages.push({
-                loc: homeUrl || baseUrl,
-                lastmod,
-                changefreq: 'daily',
-                priority: '1.0'
-            })
-
             const docsDir = join(__dirname, '..', '..')
-            const markdownFiles = getMarkdownFiles(docsDir)
 
-            console.log(`Found ${markdownFiles.length} markdown files in ${docsDir}`)
+            // Process each version
+            for (const version of versions.versions) {
+                const versionPath = version.path === '/' ? '' : version.path.replace(/\/$/, '')
+                const versionDocsDir = version.default ? docsDir : join(docsDir, version.version)
 
-            const uniqueFiles = [...new Set(markdownFiles)].sort()
-
-            uniqueFiles.forEach(path => {
-                if (path === '/' || path === '') return
-
-                const fullPath = baseUrl + (base === '/' ? '' : base.replace(/\/$/, '')) + path
-                const priority = path.startsWith('/getting-started') ? '0.9' :
-                    path.startsWith('/features') ? '0.8' :
-                        path.startsWith('/advanced') ? '0.7' : '0.6'
-
+                // Add homepage for this version
+                const homeUrl = baseUrl + (base === '/' ? '' : base.replace(/\/$/, '')) + versionPath + '/'
                 pages.push({
-                    loc: fullPath,
+                    loc: homeUrl,
                     lastmod,
-                    changefreq: 'weekly',
-                    priority
+                    changefreq: 'daily',
+                    priority: '1.0'
                 })
-            })
+
+                // Get markdown files for this version
+                if (existsSync(versionDocsDir)) {
+                    const markdownFiles = getMarkdownFiles(versionDocsDir, '')
+                    
+                    markdownFiles.forEach(path => {
+                        if (path === '/' || path === '') return
+
+                        // Skip version directories (they're handled separately)
+                        if (versions.versions.some(v => path.startsWith(`/${v.version}/`))) {
+                            return
+                        }
+
+                        const fullPath = baseUrl + (base === '/' ? '' : base.replace(/\/$/, '')) + versionPath + path
+                        const priority = path.startsWith('/getting-started') ? '0.9' :
+                            path.startsWith('/features') ? '0.8' :
+                                path.startsWith('/advanced') ? '0.7' : '0.6'
+
+                        pages.push({
+                            loc: fullPath,
+                            lastmod,
+                            changefreq: 'weekly',
+                            priority
+                        })
+                    })
+                }
+            }
+
+            // Remove duplicates and sort
+            const uniquePages = Array.from(
+                new Map(pages.map(page => [page.loc, page])).values()
+            ).sort((a, b) => a.loc.localeCompare(b.loc))
 
             const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(page => `  <url>
+${uniquePages.map(page => `  <url>
     <loc>${page.loc}</loc>
     <lastmod>${page.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
@@ -100,7 +123,7 @@ ${pages.map(page => `  <url>
 
             const sitemapPath = join(outDir, 'sitemap.xml')
             writeFileSync(sitemapPath, sitemap, 'utf-8')
-            console.log(`✓ Generated sitemap.xml with ${pages.length} pages`)
+            console.log(`✓ Generated sitemap.xml with ${uniquePages.length} pages for ${versions.versions.length} version(s)`)
         }
     }
 }

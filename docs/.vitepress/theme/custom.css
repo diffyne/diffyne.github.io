@@ -1,0 +1,6 @@
+/* Custom styles for version selector */
+.VPNavBarTitle {
+  display: flex;
+  align-items: center;
+}
+

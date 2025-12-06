@@ -1,0 +1,13 @@
+{
+  "versions": [
+    {
+      "version": "latest",
+      "label": "Latest",
+      "branch": "main",
+      "path": "/",
+      "default": true
+    }
+  ],
+  "currentVersion": "latest"
+}
+

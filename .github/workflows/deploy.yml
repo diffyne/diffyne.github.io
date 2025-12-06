@@ -24,13 +24,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout docs repo
-        uses: actions/checkout@v4
-        with:
-          repository: diffyne/docs
-          path: docs-source
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -41,8 +34,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Sync docs from docs repo
-        run: npm run sync
+      - name: Checkout docs repo (for versions config)
+        uses: actions/checkout@v4
+        with:
+          repository: diffyne/docs
+          path: docs-source
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+
+      - name: Copy versions config from docs repo
+        run: |
+          if [ -f docs-source/versions.json ]; then
+            cp docs-source/versions.json docs/.vitepress/versions.json
+            echo "✅ Copied versions.json from docs repo"
+          else
+            echo "⚠️  versions.json not found in docs repo, using default"
+          fi
+
+      - name: Sync all versions from docs repo (branch-based)
+        run: npm run sync:all
         env:
           DOCS_SOURCE_PATH: ./docs-source
 

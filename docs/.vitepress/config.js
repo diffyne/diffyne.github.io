@@ -1,5 +1,79 @@
 import { defineConfig } from 'vitepress'
 import { sitemapPlugin } from './plugins/sitemap.js'
+import { readFileSync } from 'fs'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const versions = JSON.parse(readFileSync(join(__dirname, 'versions.json'), 'utf-8'))
+const currentVersion = versions.currentVersion
+const defaultVersion = versions.versions.find(v => v.default) || versions.versions[0]
+
+function getSidebarForVersion(versionConfig) {
+  const versionPath = versionConfig.path || (versionConfig.default ? '/' : `/${versionConfig.version}/`)
+  
+  return {
+    [`${versionPath}`]: [
+      {
+        text: 'Getting Started',
+        items: [
+          { text: 'Installation', link: `${versionPath}getting-started/installation` },
+          { text: 'Quick Start', link: `${versionPath}getting-started/quickstart` },
+          { text: 'Your First Component', link: `${versionPath}getting-started/first-component` }
+        ]
+      },
+      {
+        text: 'Features',
+        items: [
+          { text: 'Directives', link: `${versionPath}features/directives` },
+          { text: 'Attributes', link: `${versionPath}features/attributes` },
+          { text: 'Click Events', link: `${versionPath}features/click-events` },
+          { text: 'Data Binding', link: `${versionPath}features/data-binding` },
+          { text: 'Forms', link: `${versionPath}features/forms` },
+          { text: 'Validation', link: `${versionPath}features/validation` },
+          { text: 'Query String Binding', link: `${versionPath}features/query-string` },
+          { text: 'Polling', link: `${versionPath}features/polling` },
+          { text: 'Loading States', link: `${versionPath}features/loading-states` },
+          { text: 'Error Handling', link: `${versionPath}features/error-handling` },
+          { text: 'Component Events', link: `${versionPath}features/component-events` },
+          { text: 'Redirects', link: `${versionPath}features/redirects` },
+          { text: 'Pagination', link: `${versionPath}features/pagination` }
+        ]
+      },
+      {
+        text: 'Advanced',
+        items: [
+          { text: 'Component State', link: `${versionPath}advanced/component-state` },
+          { text: 'Lifecycle Hooks', link: `${versionPath}advanced/lifecycle-hooks` },
+          { text: 'Virtual DOM', link: `${versionPath}advanced/virtual-dom` },
+          { text: 'Security', link: `${versionPath}advanced/security` },
+          { text: 'Performance', link: `${versionPath}advanced/performance` },
+          { text: 'Testing', link: `${versionPath}advanced/testing` },
+          { text: 'WebSocket Transport', link: `${versionPath}advanced/websocket` }
+        ]
+      },
+      {
+        text: 'Examples',
+        items: [
+          { text: 'Counter', link: `${versionPath}examples/counter` },
+          { text: 'Todo List', link: `${versionPath}examples/todo-list` },
+          { text: 'Contact Form', link: `${versionPath}examples/contact-form` },
+          { text: 'Search', link: `${versionPath}examples/search` },
+          { text: 'Confirmation Modal', link: `${versionPath}examples/confirmation-modal` },
+          { text: 'Page Change Logger', link: `${versionPath}examples/page-change-logger` }
+        ]
+      }
+    ]
+  }
+}
+
+// Build sidebar for all versions
+const sidebar = {}
+versions.versions.forEach(version => {
+  Object.assign(sidebar, getSidebarForVersion(version))
+})
 
 export default defineConfig({
   title: 'Diffyne',
@@ -59,8 +133,18 @@ export default defineConfig({
     
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/getting-started/installation' },
-      { text: 'Examples', link: '/examples/counter' },
+      { 
+        text: 'Guide', 
+        link: defaultVersion.path === '/' 
+          ? '/getting-started/installation' 
+          : `${defaultVersion.path}getting-started/installation` 
+      },
+      { 
+        text: 'Examples', 
+        link: defaultVersion.path === '/' 
+          ? '/examples/counter' 
+          : `${defaultVersion.path}examples/counter` 
+      },
       { 
         text: 'GitHub', 
         link: 'https://github.com/diffyne/diffyne',
@@ -68,59 +152,7 @@ export default defineConfig({
       }
     ],
 
-    sidebar: {
-      '/': [
-        {
-          text: 'Getting Started',
-          items: [
-            { text: 'Installation', link: '/getting-started/installation' },
-            { text: 'Quick Start', link: '/getting-started/quickstart' },
-            { text: 'Your First Component', link: '/getting-started/first-component' }
-          ]
-        },
-        {
-          text: 'Features',
-          items: [
-            { text: 'Directives', link: '/features/directives' },
-            { text: 'Attributes', link: '/features/attributes' },
-            { text: 'Click Events', link: '/features/click-events' },
-            { text: 'Data Binding', link: '/features/data-binding' },
-            { text: 'Forms', link: '/features/forms' },
-            { text: 'Validation', link: '/features/validation' },
-            { text: 'Query String Binding', link: '/features/query-string' },
-            { text: 'Polling', link: '/features/polling' },
-            { text: 'Loading States', link: '/features/loading-states' },
-            { text: 'Error Handling', link: '/features/error-handling' },
-            { text: 'Component Events', link: '/features/component-events' },
-            { text: 'Redirects', link: '/features/redirects' },
-            { text: 'Pagination', link: '/features/pagination' }
-          ]
-        },
-        {
-          text: 'Advanced',
-          items: [
-            { text: 'Component State', link: '/advanced/component-state' },
-            { text: 'Lifecycle Hooks', link: '/advanced/lifecycle-hooks' },
-            { text: 'Virtual DOM', link: '/advanced/virtual-dom' },
-            { text: 'Security', link: '/advanced/security' },
-            { text: 'Performance', link: '/advanced/performance' },
-            { text: 'Testing', link: '/advanced/testing' },
-            { text: 'WebSocket Transport', link: '/advanced/websocket' }
-          ]
-        },
-        {
-          text: 'Examples',
-          items: [
-            { text: 'Counter', link: '/examples/counter' },
-            { text: 'Todo List', link: '/examples/todo-list' },
-            { text: 'Contact Form', link: '/examples/contact-form' },
-            { text: 'Search', link: '/examples/search' },
-            { text: 'Confirmation Modal', link: '/examples/confirmation-modal' },
-            { text: 'Page Change Logger', link: '/examples/page-change-logger' }
-          ]
-        }
-      ]
-    },
+    sidebar,
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/diffyne/diffyne' }
