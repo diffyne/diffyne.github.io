@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { sitemapPlugin } from './plugins/sitemap.js'
 
 export default defineConfig({
   title: 'Diffyne',
@@ -6,16 +7,55 @@ export default defineConfig({
   
   base: '/',
   
-  // Ignore dead links during build
-  ignoreDeadLinks: true,
+  // Plugins
+  vite: {
+    plugins: [sitemapPlugin()]
+  },
   
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#3eaf7c' }]
+    // Favicon
+    ['link', { rel: 'icon', href: '/logo.png', type: 'image/png' }],
+    ['link', { rel: 'apple-touch-icon', href: '/logo.png' }],
+    
+    // Theme
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    
+    // Open Graph / Facebook
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:url', content: 'https://diffyne.github.io/' }],
+    ['meta', { property: 'og:title', content: 'Diffyne - Server-Driven UI for PHP' }],
+    ['meta', { property: 'og:description', content: 'Blazing-fast, server-driven UI framework for PHP powered by a lightweight Virtual DOM + Diff Engine' }],
+    ['meta', { property: 'og:image', content: 'https://diffyne.github.io/logo.png' }],
+    ['meta', { property: 'og:image:width', content: '1200' }],
+    ['meta', { property: 'og:image:height', content: '630' }],
+    ['meta', { property: 'og:image:alt', content: 'Diffyne Logo' }],
+    ['meta', { property: 'og:site_name', content: 'Diffyne' }],
+    ['meta', { property: 'og:locale', content: 'en_US' }],
+    
+    // Twitter Card
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:url', content: 'https://diffyne.github.io/' }],
+    ['meta', { name: 'twitter:title', content: 'Diffyne - Server-Driven UI for PHP' }],
+    ['meta', { name: 'twitter:description', content: 'Blazing-fast, server-driven UI framework for PHP powered by a lightweight Virtual DOM + Diff Engine' }],
+    ['meta', { name: 'twitter:image', content: 'https://diffyne.github.io/logo.png' }],
+    ['meta', { name: 'twitter:image:alt', content: 'Diffyne Logo' }],
+    ['meta', { name: 'twitter:creator', content: '@diffyne' }],
+    ['meta', { name: 'twitter:site', content: '@diffyne' }],
+    
+    // Additional SEO
+    ['meta', { name: 'author', content: 'Diffyne' }],
+    ['meta', { name: 'keywords', content: 'PHP, Laravel, Server-Driven UI, Virtual DOM, Reactive Components, Livewire Alternative, PHP Framework' }],
+    ['meta', { name: 'robots', content: 'index, follow' }],
+    ['meta', { name: 'language', content: 'English' }],
+    ['meta', { name: 'revisit-after', content: '7 days' }],
+    
+    // Additional meta
+    ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
+    ['meta', { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' }]
   ],
 
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/logo.png',
     
     nav: [
       { text: 'Home', link: '/' },

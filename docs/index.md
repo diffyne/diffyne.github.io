@@ -6,12 +6,12 @@ hero:
   text: Server-Driven UI for PHP
   tagline: Blazing-fast, reactive components powered by Virtual DOM
   image:
-    src: /logo.svg
+    src: /logo.png
     alt: Diffyne
   actions:
     - theme: brand
       text: Get Started
-      link: /guide/
+      link: /getting-started/installation
     - theme: alt
       text: View on GitHub
       link: https://github.com/diffyne/diffyne
