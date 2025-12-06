@@ -19,9 +19,8 @@ export default defineConfig({
     
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/' },
-      { text: 'Examples', link: '/examples/' },
-      { text: 'API', link: '/api/' },
+      { text: 'Guide', link: '/getting-started/installation' },
+      { text: 'Examples', link: '/examples/counter' },
       { 
         text: 'GitHub', 
         link: 'https://github.com/diffyne/diffyne',
@@ -30,57 +29,45 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/guide/': [
+      '/': [
         {
           text: 'Getting Started',
           items: [
-            { text: 'Introduction', link: '/guide/' },
-            { text: 'Installation', link: '/guide/installation' },
-            { text: 'Quick Start', link: '/guide/quickstart' },
-            { text: 'Your First Component', link: '/guide/first-component' }
+            { text: 'Installation', link: '/getting-started/installation' },
+            { text: 'Quick Start', link: '/getting-started/quickstart' },
+            { text: 'Your First Component', link: '/getting-started/first-component' }
           ]
         },
         {
-          text: 'Core Concepts',
+          text: 'Features',
           items: [
-            { text: 'Components', link: '/guide/components' },
-            { text: 'Properties & State', link: '/guide/properties' },
-            { text: 'Methods & Actions', link: '/guide/methods' },
-            { text: 'Lifecycle Hooks', link: '/guide/lifecycle' }
+            { text: 'Directives', link: '/features/directives' },
+            { text: 'Attributes', link: '/features/attributes' },
+            { text: 'Click Events', link: '/features/click-events' },
+            { text: 'Data Binding', link: '/features/data-binding' },
+            { text: 'Forms', link: '/features/forms' },
+            { text: 'Validation', link: '/features/validation' },
+            { text: 'Query String Binding', link: '/features/query-string' },
+            { text: 'Polling', link: '/features/polling' },
+            { text: 'Loading States', link: '/features/loading-states' },
+            { text: 'Error Handling', link: '/features/error-handling' },
+            { text: 'Component Events', link: '/features/component-events' },
+            { text: 'Redirects', link: '/features/redirects' },
+            { text: 'Pagination', link: '/features/pagination' }
           ]
         },
         {
-          text: 'Building UIs',
+          text: 'Advanced',
           items: [
-            { text: 'Directives', link: '/guide/directives' },
-            { text: 'Event Handling', link: '/guide/events' },
-            { text: 'Data Binding', link: '/guide/data-binding' },
-            { text: 'Forms', link: '/guide/forms' },
-            { text: 'Validation', link: '/guide/validation' }
+            { text: 'Component State', link: '/advanced/component-state' },
+            { text: 'Lifecycle Hooks', link: '/advanced/lifecycle-hooks' },
+            { text: 'Virtual DOM', link: '/advanced/virtual-dom' },
+            { text: 'Security', link: '/advanced/security' },
+            { text: 'Performance', link: '/advanced/performance' },
+            { text: 'Testing', link: '/advanced/testing' },
+            { text: 'WebSocket Transport', link: '/advanced/websocket' }
           ]
         },
-        {
-          text: 'Advanced Features',
-          items: [
-            { text: 'Query String Binding', link: '/guide/query-string' },
-            { text: 'Polling & Real-time', link: '/guide/polling' },
-            { text: 'Loading States', link: '/guide/loading-states' },
-            { text: 'Error Handling', link: '/guide/error-handling' },
-            { text: 'Component Events', link: '/guide/component-events' },
-            { text: 'Redirects', link: '/guide/redirects' }
-          ]
-        },
-        {
-          text: 'Advanced Topics',
-          items: [
-            { text: 'Security', link: '/guide/security' },
-            { text: 'Performance', link: '/guide/performance' },
-            { text: 'Testing', link: '/guide/testing' },
-            { text: 'WebSocket Transport', link: '/guide/websocket' }
-          ]
-        }
-      ],
-      '/examples/': [
         {
           text: 'Examples',
           items: [
@@ -88,7 +75,8 @@ export default defineConfig({
             { text: 'Todo List', link: '/examples/todo-list' },
             { text: 'Contact Form', link: '/examples/contact-form' },
             { text: 'Search', link: '/examples/search' },
-            { text: 'Confirmation Modal', link: '/examples/confirmation-modal' }
+            { text: 'Confirmation Modal', link: '/examples/confirmation-modal' },
+            { text: 'Page Change Logger', link: '/examples/page-change-logger' }
           ]
         }
       ]
@@ -100,7 +88,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024 Diffyne'
+      copyright: 'Copyright © 2025 Diffyne'
     },
 
     search: {

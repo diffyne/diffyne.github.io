@@ -99,5 +99,5 @@ Traditional server-side rendering sends full HTML on every interaction. Diffyne 
 - **Interactive UIs** without writing JavaScript
 - **Real-time apps** with WebSocket support
 
-Ready to get started? [Read the guide →](/guide/)
+Ready to get started? [Read the guide →](/getting-started/installation)
 
