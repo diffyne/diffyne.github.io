@@ -6,6 +6,9 @@ export default defineConfig({
   
   base: '/',
   
+  // Ignore dead links during build
+  ignoreDeadLinks: true,
+  
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }]

@@ -47,6 +47,9 @@ function syncDirectory(sourceDir, targetDir, basePath = '') {
 
       // Fix relative links
       content = fixLinks(content, basePath);
+      
+      // Fix syntax highlighting issues
+      content = fixSyntaxHighlighting(content);
 
       // Write to target
       writeFileSync(targetPath, content, 'utf-8');
@@ -91,6 +94,18 @@ function fixLinks(content, basePath) {
     return match;
   });
 
+  return content;
+}
+
+// Fix syntax highlighting issues
+function fixSyntaxHighlighting(content) {
+  // Replace 'env' language with 'bash' (VitePress doesn't support 'env')
+  content = content.replace(/```env\n/g, '```bash\n');
+  
+  // Remove any stray HTML closing tags that might break VitePress
+  // This is a safety measure for malformed markdown
+  content = content.replace(/^(\s*)<\/[a-z]+>\s*$/gm, '');
+  
   return content;
 }
 
